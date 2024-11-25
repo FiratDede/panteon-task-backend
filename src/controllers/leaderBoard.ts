@@ -9,6 +9,39 @@ export async function getRankOfPlayerWithTopRankingsLatest(req: Request, res: Re
 
     const { name } = req.body
 
+    if (name === "") {
+
+        const answer = await LeaderBoardData.findAll(
+            {
+                attributes: ["money"],
+                limit: 100,
+
+                where: { leaderBoardId: String(latestLeaderBoardId) },
+                order: [["money", "DESC"]],
+                include: [
+                    {
+                        model: Player,
+                        attributes: [
+                            ['id', 'playerId'],
+                            'name',
+                            'country',
+                        ]
+                    },
+                ],
+                raw: true
+            })
+        let answerWithRanks: any = []
+
+        answerWithRanks = answer.map((val, index) => {
+            return { ...val, rank: index + 1 }
+        })
+
+        res.status(200).json(answerWithRanks)
+        return
+
+    }
+
+
     const searchedPlayer = await Player.findOne({
         where: {
             name: name
@@ -16,7 +49,7 @@ export async function getRankOfPlayerWithTopRankingsLatest(req: Request, res: Re
     })
 
     if (!searchedPlayer) {
-        res.send("Player Not Found")
+        res.json([])
         return
     }
 
@@ -56,7 +89,7 @@ export async function getRankOfPlayerWithTopRankingsLatest(req: Request, res: Re
                 {
                     model: Player,
                     attributes: [
-                        ['id','playerId'],
+                        ['id', 'playerId'],
                         'name',
                         'country',
                     ]
@@ -65,9 +98,9 @@ export async function getRankOfPlayerWithTopRankingsLatest(req: Request, res: Re
             raw: true
         })
 
-      let  answerWithRanks: any = []
-   
-         answerWithRanks = answer.map((val, index) => {
+    let answerWithRanks: any = []
+
+    answerWithRanks = answer.map((val, index) => {
         if (index <= 99) {
 
             return { ...val, rank: index + 1 }
@@ -82,7 +115,7 @@ export async function getRankOfPlayerWithTopRankingsLatest(req: Request, res: Re
         }
 
     })
-        
+
 
     // console.log(answerWithRanks)
 

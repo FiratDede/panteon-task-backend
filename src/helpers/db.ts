@@ -41,15 +41,20 @@ export let sequelize = new Sequelize(database.dbName, database.dbUsername, datab
   logging: false,
 });
 
+let isFirstSyncronized
+
 export const sequelizeCheck = async () => {
-
-
   await sequelize.authenticate();
   console.log('DB connection has been established successfully.');
 
+  
+  // await sequelize.sync({}); 
+  // console.log('Db syncronized!');
 
 
 }
+
+
 
 export async function syncDB() {
   try {
@@ -57,7 +62,7 @@ export async function syncDB() {
     await sequelize.authenticate();
 
     // Sync DB
-    await sequelize.sync({}); // Create tables from scratch
+    await sequelize.sync({}); 
     console.log('Db syncronized!');
 
   } catch (error) {

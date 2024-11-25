@@ -58,7 +58,7 @@ app.get("/deneme", async (req: Request, res: Response, next: NextFunction) =>{
     return 
 } )
 
- resetLatestLeaderBoardAndPrepareNewLeaderBoard();
+ setTimeout( resetLatestLeaderBoardAndPrepareNewLeaderBoard, 15*1000);
 
 
 

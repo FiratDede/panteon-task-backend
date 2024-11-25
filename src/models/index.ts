@@ -18,7 +18,7 @@ syncDB();
 
 export const addSomeDataForTest = async (playerCount: number) => {
   try {
-    console.log("add section")
+    console.log("Adding Some Data For Test")
     // Check DB Connection
     await sequelize.authenticate();
 

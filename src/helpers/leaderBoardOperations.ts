@@ -1,11 +1,14 @@
 import Sequlize from "sequelize";
 import redisClient from "../helpers/redisClient"
-import { LeaderBoard, LeaderBoardData, Player } from "../models"
-import { sequelize } from "./db";
+import { sequelize, syncDB } from "./db";
+
+import { addSomeDataForTest, LeaderBoard, LeaderBoardData, Player } from "../models"
+import { oneWeekInMillis } from "../constants";
 
 export async function resetLatestLeaderBoardAndPrepareNewLeaderBoard() {
   
-
+  // await syncDB()
+  
   let latestLeaderBoard = await LeaderBoard.findOne({
     order: [['createdAt', 'DESC']]
 
@@ -18,8 +21,10 @@ export async function resetLatestLeaderBoardAndPrepareNewLeaderBoard() {
 
 
   if (!latestLeaderBoard) {
-
-    throw new Error("Please create a leader Board")
+    console.log("Leader Board Cannot Be Found")
+   await  addSomeDataForTest(10000);
+   setTimeout(resetLatestLeaderBoardAndPrepareNewLeaderBoard,oneWeekInMillis)
+   return
   }
 
   // Büyüktür kalcak
@@ -112,7 +117,6 @@ export async function resetLatestLeaderBoardAndPrepareNewLeaderBoard() {
 
     console.log("LeaderBoard Resetted")
     
-    const oneWeekInMillis = 7 * 24 * 60 * 60 * 1000;
     setTimeout(resetLatestLeaderBoardAndPrepareNewLeaderBoard,oneWeekInMillis)
 
   }

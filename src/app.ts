@@ -17,7 +17,7 @@ const PORT = 3000
 
 
 //Connect DB
-sequelizeCheck().then(async ()=>{
+sequelizeCheck().then(async () => {
 });
 
 // Connect Redis Server
@@ -25,37 +25,41 @@ connectRedisServer();
 
 // Start Server
 app.listen(PORT, () => {
-    console.log('Server is running on http://localhost:'+PORT);
+    console.log('Server is running on http://localhost:' + PORT);
 });
 
-// Enable CORS for all routes
-app.use(cors({
-    origin: 'http://localhost:3001', 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
-    
-  }));
-  app.use(cors({
-    origin: 'https://panteon-task-frontend.onrender.com', 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', 
-    
-  }));
- 
+// İzin verilen kaynakların listesi
+const allowedOrigins = ['http://localhost:3001', 'https://panteon-task-frontend.onrender.com'];
+
+const corsOptions = {
+  origin: function (origin:any, callback:any) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true); // Kaynak izin verilen listede ise, erişime izin ver
+    } else {
+      callback(new Error('Not allowed by CORS'), false); // Aksi takdirde erişimi reddet
+    }
+  }
+};
+
+// CORS middleware kullan
+app.use(cors(corsOptions));
+
 
 // Middleware For Handling Errors
 app.use(errorHandlerMiddleware)
 
 
-app.get("/", async (req: Request, res: Response, next: NextFunction) =>{
+app.get("/", async (req: Request, res: Response, next: NextFunction) => {
     res.send("Hello world")
-    return 
-} )
+    return
+})
 
-app.use("/leaderBoard",leaderBoardRouter);
-
-
+app.use("/leaderBoard", leaderBoardRouter);
 
 
- setTimeout( resetLatestLeaderBoardAndPrepareNewLeaderBoard, 15*1000);
+
+
+setTimeout(resetLatestLeaderBoardAndPrepareNewLeaderBoard, 15 * 1000);
 
 
 

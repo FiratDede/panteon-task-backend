@@ -5,7 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "npm install && nodemon src/app.ts",
-    "build": "npm install && tsc && node ./dist/app.js"
+    "build": "npm install && tsc ",
+    "start": "node ./dist/app.js"
   },
   "author": "",
   "license": "ISC",

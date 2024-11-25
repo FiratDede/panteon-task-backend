@@ -37,26 +37,16 @@ app.use(cors({
 // Middleware For Handling Errors
 app.use(errorHandlerMiddleware)
 
+
+app.get("/", async (req: Request, res: Response, next: NextFunction) =>{
+    res.send("Hello world")
+    return 
+} )
+
 app.use("/leaderBoard",leaderBoardRouter);
 
 
-app.get("/addData", async (req: Request, res: Response, next: NextFunction ) => {
-    await addSomeDataForTest(10000)
-    res.send("Added Data")
-    return
-})
 
-app.get("/resetDB", async (req: Request, res: Response, next: NextFunction ) => {
-    await resetDB()
-    res.send("DB resetted")
-    return
-})
-
-app.get("/deneme", async (req: Request, res: Response, next: NextFunction) =>{
-    const answer = await deneme()
-    res.json(answer)
-    return 
-} )
 
  setTimeout( resetLatestLeaderBoardAndPrepareNewLeaderBoard, 15*1000);
 
